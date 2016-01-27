@@ -25,6 +25,7 @@ function start_server(port, opt){
     server.on('connect', run_proxy);
     server.lum_port = port;
     server.lum_opt = {session: port};
+    server.lum_agent = new http.Agent({keepAlive: true, keepAliveMsecs: 5000});
     copy_opt(server.lum_opt, opt);
     server.listen(port);
     console.log(port+': '+JSON.stringify(server.lum_opt));
@@ -44,9 +45,7 @@ function lum_auth(opt){
 }
 
 function lum_superproxy(opt){
-    var arr = ['servercountry', opt.superproxy||'us', 'session', opt.session];
-    return arr.join('-')+'.zproxy.luminati.io';
-}
+    return 'servercountry-'+(opt.superproxy||'us')+'.zproxy.luminati.io'; }
 
 const CRLF = '\r\n';
 function write_http_reply(stream, res){
@@ -77,6 +76,7 @@ function run_proxy(client_req, client_res, head){
         method: client_req.method,
         path: client_req.url,
         headers: client_req.headers,
+        agent: server.lum_agent,
     };
     var proxy = http.request(lum_req);
     if (client_req.method=='CONNECT')
