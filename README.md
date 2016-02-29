@@ -1,6 +1,6 @@
 # Local NodeJS proxy for Luminati.io network
 
-You need active [Luminati.io](https://luminati.io) account to use this software.
+You need active [Luminati.io](http://uminati.io/?cam=github) account to use this software.
 
 ### Configuration
 
